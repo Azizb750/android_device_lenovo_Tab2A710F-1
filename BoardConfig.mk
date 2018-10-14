@@ -1,5 +1,3 @@
-USE_CAMERA_STUB := true
-
 DEVICE_DIR := device/lenovo/Tab2A710F
 VENDOR_DIR := vendor/lenovo/Tab2A710F
 KERNEL_DIR := kernel/lenovo/Tab2A710F
@@ -127,6 +125,22 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_DIR)/bluetooth
 TARGET_RECOVERY_FSTAB := $(DEVICE_DIR)/recovery/root/recovery.fstab
 TARGET_RECOVERY_INITRC := $(DEVICE_DIR)/recovery/root/init.rc
 
+# Camera
+TARGET_SPECIFIC_CAMERA_PARAMETER_LIBRARY := libcamera_parameters_mtk
+TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS := true
+TARGET_HAS_LEGACY_CAMERA_HAL1 := true
+USE_CAMERA_STUB := true
+TARGET_PROVIDES_INIT_RC := true
+
+# Camera Testing
+USE_DEVICE_SPECIFIC_CAMERA := true
+BOARD_USES_MTK_MEDIA_PROFILES:= true
+TARGET_HAS_LEGACY_LP_CAM := true
+TARGET_CAMERASERVICE_CLOSES_NATIVE_HANDLES := true
+
+# Fix video autoscaling on old OMX decoders
+TARGET_OMX_LEGACY_RESCALING:= true
+
 # Debug
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
@@ -137,8 +151,8 @@ TARGET_LDPRELOAD += libxlog.so
 TARGET_LDPRELOAD += libmtk_symbols.so
 
 # SELinux
-#BOARD_SEPOLICY_DIRS := \
-       $(DEVICE_DIR)/sepolicy
+BOARD_SEPOLICY_DIRS += $(DEVICE_DIR)/sepolicy
+POLICYVERS :=26
 
 # Hack for build
 $(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr)
@@ -148,6 +162,3 @@ $(shell mkdir -p $(OUT)/obj/KERNEL_OBJ/usr)
 #        netd.te \
 #        system.te \
 #        file_contexts
-       
-#POLICYVERS := 26
- 
